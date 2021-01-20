@@ -138,19 +138,23 @@
     case LAErrorPasscodeNotSet:
     case LAErrorTouchIDNotEnrolled:
       if ([arguments[@"useErrorDialogs"] boolValue]) {
-        [self alertMessage:arguments[@"goToSettingDescriptionIOS"]
+        dispatch_async(dispatch_get_main_queue(), ^{
+          [self alertMessage:arguments[@"goToSettingDescriptionIOS"]
                  firstButton:arguments[@"okButton"]
                flutterResult:result
             additionalButton:arguments[@"goToSetting"]];
+        });
         return;
       }
       errorCode = authError.code == LAErrorPasscodeNotSet ? @"PasscodeNotSet" : @"NotEnrolled";
       break;
     case LAErrorTouchIDLockout:
-      [self alertMessage:arguments[@"lockOut"]
+      dispatch_async(dispatch_get_main_queue(), ^{
+        [self alertMessage:arguments[@"lockOut"]
                firstButton:arguments[@"okButton"]
              flutterResult:result
           additionalButton:nil];
+      });
       return;
   }
   result([FlutterError errorWithCode:errorCode
